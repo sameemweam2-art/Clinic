@@ -129,7 +129,7 @@ st_scheduled:'Scheduled',st_done:'Completed',st_cancelled:'Cancelled',st_noshow:
 patients_h:'Patients ({n})',add_patient:'+ Add patient',search_ph:'Search by name, phone, or condition…',no_patients:'No patients yet. Click “Add patient”.',
 deleted_patient:'(deleted patient)',
 edit:'Edit',new:'New',patient:'patient',edit_patient:'Edit patient',new_patient:'New patient',
-f_name:'Full name *',f_dob:'Date of birth',f_sex:'Sex',f_phone:'Phone',f_address:'Address',f_allergies:'Allergies',f_conditions:'Chronic conditions',f_notes:'General notes',
+f_name:'Full name *',f_age:'Age (years)',f_sex:'Sex',f_phone:'Phone',f_address:'Address',f_allergies:'Allergies',f_conditions:'Chronic conditions',f_notes:'General notes',
 male:'Male',female:'Female',other:'Other',
 save:'Save',cancel:'Cancel',delete:'Delete',print:'Print',
 name_required:'Name is required.',
@@ -165,7 +165,7 @@ cnt_p:'Patients',cnt_a:'Appointments',
 import_q:'Replace current data with this backup ({p} patients, {a} appointments)?',
 import_ok:'Backup restored.',import_bad:'That file is not a valid backup.',
 save_fail:'Could not save. Storage may be full or blocked by the browser.',
-not_found:'Patient not found.',ok:'OK',confirm:'Confirm',no_storage:'WARNING: this browser is not letting the page save data, so everything you enter will be lost when you close it. Open the file directly in Chrome (not from inside WhatsApp or another app), or use the hosted version.',
+not_found:'Patient not found.',ok:'OK',confirm:'Confirm',tests_h:'Tests & labs',add_test:'+ Add test',no_tests:'No tests recorded.',t_name:'Test name',t_result:'Result',new_test:'New test — {n}',edit_test:'Edit test — {n}',del_test:'Delete this test record?',no_storage:'WARNING: this browser is not letting the page save data, so everything you enter will be lost when you close it. Open the file directly in Chrome (not from inside WhatsApp or another app), or use the hosted version.',
 tab_ph_age:''
 },
 ar:{
@@ -181,7 +181,7 @@ st_scheduled:'محجوز',st_done:'تم',st_cancelled:'ملغي',st_noshow:'لم
 patients_h:'المرضى ({n})',add_patient:'+ إضافة مريض',search_ph:'ابحث بالاسم أو الهاتف أو المرض…',no_patients:'لا يوجد مرضى بعد. اضغط «إضافة مريض».',
 deleted_patient:'(مريض محذوف)',
 edit:'تعديل',new:'جديد',patient:'مريض',edit_patient:'تعديل بيانات المريض',new_patient:'مريض جديد',
-f_name:'الاسم الكامل *',f_dob:'تاريخ الميلاد',f_sex:'الجنس',f_phone:'الهاتف',f_address:'العنوان',f_allergies:'الحساسية',f_conditions:'الأمراض المزمنة',f_notes:'ملاحظات عامة',
+f_name:'الاسم الكامل *',f_age:'العمر (بالسنوات)',f_sex:'الجنس',f_phone:'الهاتف',f_address:'العنوان',f_allergies:'الحساسية',f_conditions:'الأمراض المزمنة',f_notes:'ملاحظات عامة',
 male:'ذكر',female:'أنثى',other:'آخر',
 save:'حفظ',cancel:'إلغاء',delete:'حذف',print:'طباعة',
 name_required:'الاسم مطلوب.',
@@ -217,7 +217,7 @@ cnt_p:'المرضى',cnt_a:'المواعيد',
 import_q:'استبدال البيانات الحالية بهذه النسخة ({p} مريض، {a} موعد)؟',
 import_ok:'تمت استعادة النسخة الاحتياطية.',import_bad:'هذا الملف ليس نسخة احتياطية صالحة.',
 save_fail:'تعذّر الحفظ. قد تكون مساحة التخزين ممتلئة أو محجوبة من المتصفح.',
-not_found:'لم يتم العثور على المريض.',ok:'حسناً',confirm:'تأكيد',no_storage:'تحذير: المتصفح لا يسمح للصفحة بحفظ البيانات، وكل ما تدخله سيضيع عند إغلاقها. افتح الملف مباشرة من Chrome (وليس من داخل واتساب أو تطبيق آخر)، أو استخدم النسخة المستضافة.',
+not_found:'لم يتم العثور على المريض.',ok:'حسناً',confirm:'تأكيد',tests_h:'التحاليل',add_test:'+ إضافة تحليل',no_tests:'لا توجد تحاليل مسجلة.',t_name:'اسم التحليل',t_result:'النتيجة',new_test:'تحليل جديد — {n}',edit_test:'تعديل تحليل — {n}',del_test:'حذف هذا التحليل؟',no_storage:'تحذير: المتصفح لا يسمح للصفحة بحفظ البيانات، وكل ما تدخله سيضيع عند إغلاقها. افتح الملف مباشرة من Chrome (وليس من داخل واتساب أو تطبيق آخر)، أو استخدم النسخة المستضافة.',
 tab_ph_age:''
 }};
 let LANG='en';
@@ -238,7 +238,9 @@ const KEY='clinic_data_v1';
 let S={patients:[],appts:[],pin:null};
 let view='dash', curPatient=null, apptFilter='upcoming', q='';
 
-function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d)S=Object.assign({patients:[],appts:[],pin:null},d)}catch(e){}}
+/* old records stored a date of birth: convert it once to an age in years; make sure new fields exist */
+function migrate(o){(o.patients||[]).forEach(p=>{if(p.age===undefined||p.age===null)p.age=p.dob?String(age(p.dob)):'';if(p.diagnosis===undefined)p.diagnosis='';if(!Array.isArray(p.tests))p.tests=[];if(!Array.isArray(p.visits))p.visits=[]});return o}
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d)S=migrate(Object.assign({patients:[],appts:[],pin:null},d))}catch(e){}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){showMsg(t('save_fail'))}}
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -330,31 +332,32 @@ function vDash(){
 /* ================= patients ================= */
 function vPatients(){
   const needle=q.toLowerCase();
-  const list=S.patients.filter(p=>!needle||((p.name||'')+' '+(p.phone||'')+' '+(p.conditions||'')).toLowerCase().includes(needle)).sort(byName);
+  const list=S.patients.filter(p=>!needle||((p.name||'')+' '+(p.phone||'')+' '+(p.conditions||'')+' '+(p.diagnosis||'')).toLowerCase().includes(needle)).sort(byName);
   return `<div class="card"><div class="row"><h2 class="grow" style="margin:0">${t('patients_h',{n:S.patients.length})}</h2><button class="btn" onclick="editPatient()">${t('add_patient')}</button></div>
   <div class="row"><input id="search" placeholder="${esc(t('search_ph'))}" value="${esc(q)}" oninput="q=this.value;keepFocus()"></div>
-  ${list.length?`<table class="stack"><tr class="hd"><th>${t('col_name')}</th><th>${t('col_age')}</th><th>${t('col_sex')}</th><th>${t('col_phone')}</th><th>${t('col_conditions')}</th></tr>`+list.map(p=>`<tr class="click" onclick="go('patient','${p.id}')"><td ${dl('col_name')}><b>${esc(p.name)}</b></td><td ${dl('col_age')}>${age(p.dob)}</td><td ${dl('col_sex')}>${esc(sexLabel(p.sex))}</td><td ${dl('col_phone')}><span dir="ltr">${esc(p.phone)}</span></td><td ${dl('col_conditions')}>${esc(p.conditions)}</td></tr>`).join('')+'</table>':`<div class="empty">${t('no_patients')}</div>`}</div>`;
+  ${list.length?`<table class="stack"><tr class="hd"><th>${t('col_name')}</th><th>${t('col_age')}</th><th>${t('col_sex')}</th><th>${t('col_phone')}</th><th>${t('col_conditions')}</th></tr>`+list.map(p=>`<tr class="click" onclick="go('patient','${p.id}')"><td ${dl('col_name')}><b>${esc(p.name)}</b></td><td ${dl('col_age')}>${esc(p.age)}</td><td ${dl('col_sex')}>${esc(sexLabel(p.sex))}</td><td ${dl('col_phone')}><span dir="ltr">${esc(p.phone)}</span></td><td ${dl('col_conditions')}>${esc(p.conditions)}</td></tr>`).join('')+'</table>':`<div class="empty">${t('no_patients')}</div>`}</div>`;
 }
 function keepFocus(){const pos=$('search').selectionStart;render();const s=$('search');s.focus();s.setSelectionRange(pos,pos)}
 
 function editPatient(id){
-  const p=id?S.patients.find(x=>x.id===id):{name:'',dob:'',sex:'',phone:'',address:'',allergies:'',conditions:'',notes:''};
+  const p=id?S.patients.find(x=>x.id===id):{name:'',age:'',diagnosis:'',sex:'',phone:'',address:'',allergies:'',conditions:'',notes:''};
   openModal(`<h2>${id?t('edit_patient'):t('new_patient')}</h2><div class="grid">
     <div class="full"><label>${t('f_name')}</label><input id="f_name" value="${esc(p.name)}"></div>
-    <div><label>${t('f_dob')}</label><input id="f_dob" type="date" value="${esc(p.dob)}"></div>
+    <div><label>${t('f_age')}</label><input id="f_age" type="number" inputmode="numeric" min="0" max="130" value="${esc(p.age)}"></div>
     <div><label>${t('f_sex')}</label><select id="f_sex"><option value=""></option>${['Male','Female','Other'].map(s=>`<option value="${s}" ${p.sex===s?'selected':''}>${sexLabel(s)}</option>`).join('')}</select></div>
     <div><label>${t('f_phone')}</label><input id="f_phone" type="tel" value="${esc(p.phone)}"></div>
     <div><label>${t('f_address')}</label><input id="f_address" value="${esc(p.address)}"></div>
     <div class="full"><label>${t('f_allergies')}</label><input id="f_allergies" value="${esc(p.allergies)}"></div>
     <div class="full"><label>${t('f_conditions')}</label><input id="f_conditions" value="${esc(p.conditions)}"></div>
+    <div class="full"><label>${t('diagnosis')}</label><textarea id="f_diagnosis">${esc(p.diagnosis)}</textarea></div>
     <div class="full"><label>${t('f_notes')}</label><textarea id="f_notes">${esc(p.notes)}</textarea></div></div>
     <div class="row" style="margin-top:14px"><button class="btn" onclick="savePatient('${id||''}')">${t('save')}</button><button class="btn sec" onclick="closeModal()">${t('cancel')}</button></div>`);
   $('f_name').focus();
 }
 function savePatient(id){
   const name=$('f_name').value.trim();if(!name){showMsg(t('name_required'));return}
-  const d={name,dob:$('f_dob').value,sex:$('f_sex').value,phone:$('f_phone').value.trim(),address:$('f_address').value.trim(),allergies:$('f_allergies').value.trim(),conditions:$('f_conditions').value.trim(),notes:$('f_notes').value.trim()};
-  if(id){Object.assign(S.patients.find(x=>x.id===id),d)}else{const n=Object.assign({id:uid(),visits:[],created:today()},d);S.patients.push(n);id=n.id}
+  const d={name,age:$('f_age').value.trim(),diagnosis:$('f_diagnosis').value.trim(),sex:$('f_sex').value,phone:$('f_phone').value.trim(),address:$('f_address').value.trim(),allergies:$('f_allergies').value.trim(),conditions:$('f_conditions').value.trim(),notes:$('f_notes').value.trim()};
+  if(id){Object.assign(S.patients.find(x=>x.id===id),d)}else{const n=Object.assign({id:uid(),visits:[],tests:[],created:today()},d);S.patients.push(n);id=n.id}
   save();closeModal();go('patient',id);
 }
 function delPatient(id){
@@ -371,8 +374,8 @@ function vPatient(){
   const visits=(p.visits||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
   const ap=sortAppts(S.appts.filter(a=>a.pid===p.id)).reverse();
   const row=(k,v)=>v?`<div><label>${k}</label>${esc(v)}</div>`:'';
-  const a=age(p.dob);
-  const ageTxt=a!==''?t('years',{n:a})+(p.dob?' ('+p.dob+')':''):'';
+  const ageTxt=(p.age!==undefined&&p.age!=='')?t('years',{n:p.age}):'';
+  const tests=(p.tests||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
   return `<div class="row noprint"><button class="btn sec sm" onclick="go('patients')">${t('back_all')}</button></div>
   <div class="card"><div class="row"><h2 class="grow" style="margin:0">${esc(p.name)}</h2>
     <button class="btn sec sm noprint" onclick="window.print()">${t('print')}</button>
@@ -380,10 +383,13 @@ function vPatient(){
     <button class="btn red sm noprint" onclick="delPatient('${p.id}')">${t('delete')}</button></div>
     <div class="grid">${row(t('col_age'),ageTxt)}${row(t('col_sex'),sexLabel(p.sex))}${row(t('col_phone'),p.phone)}${row(t('f_address'),p.address)}
     ${p.allergies?`<div class="full"><label>${t('f_allergies')}</label><span class="warn">${esc(p.allergies)}</span></div>`:''}
-    ${row(t('f_conditions'),p.conditions)}${row(t('notes'),p.notes)}</div></div>
+    ${row(t('f_conditions'),p.conditions)}${p.diagnosis?`<div class="full"><label>${t('diagnosis')}</label><span style="white-space:pre-wrap">${esc(p.diagnosis)}</span></div>`:''}${row(t('notes'),p.notes)}</div></div>
   <div class="card"><div class="row"><h2 class="grow" style="margin:0">${t('visit_hist')}</h2><button class="btn noprint" onclick="editVisit('${p.id}')">${t('add_visit')}</button></div>
     ${visits.length?visits.map(v=>`<div class="visit"><div class="row" style="margin-bottom:4px"><b class="grow">${esc(fdate(v.date))}</b><span class="noprint"><button class="btn sec sm" onclick="editVisit('${p.id}','${v.id}')">${t('edit')}</button> <button class="btn red sm" onclick="delVisit('${p.id}','${v.id}')">${t('delete')}</button></span></div>
       ${v.complaint?`<div><span class="mute">${t('complaint')}:</span> ${esc(v.complaint)}</div>`:''}${v.diagnosis?`<div><span class="mute">${t('diagnosis')}:</span> ${esc(v.diagnosis)}</div>`:''}${v.treatment?`<div style="white-space:pre-wrap"><span class="mute">${t('treatment')}:</span> ${esc(v.treatment)}</div>`:''}</div>`).join(''):`<div class="empty">${t('no_visits')}</div>`}</div>
+  <div class="card"><div class="row"><h2 class="grow" style="margin:0">${t('tests_h')}</h2><button class="btn noprint" onclick="editTest('${p.id}')">${t('add_test')}</button></div>
+    ${tests.length?tests.map(x=>`<div class="visit"><div class="row" style="margin-bottom:4px"><b class="grow">${esc(x.name)} <span class="mute" style="font-weight:400">· ${esc(fdate(x.date))}</span></b><span class="noprint"><button class="btn sec sm" onclick="editTest('${p.id}','${x.id}')">${t('edit')}</button> <button class="btn red sm" onclick="delTest('${p.id}','${x.id}')">${t('delete')}</button></span></div>
+      ${x.result?`<div style="white-space:pre-wrap"><span class="mute">${t('t_result')}:</span> ${esc(x.result)}</div>`:''}${x.notes?`<div style="white-space:pre-wrap"><span class="mute">${t('notes')}:</span> ${esc(x.notes)}</div>`:''}</div>`).join(''):`<div class="empty">${t('no_tests')}</div>`}</div>
   <div class="card noprint"><div class="row"><h2 class="grow" style="margin:0">${t('appts_h')}</h2><button class="btn" onclick="editAppt(null,'${p.id}')">${t('book_appt')}</button></div>${ap.length?apptTable(ap,false):`<div class="empty">${t('no_appts')}</div>`}</div>`;
 }
 function editVisit(pid,vid){
@@ -403,6 +409,30 @@ function saveVisit(pid,vid){
   save();closeModal();render();
 }
 function delVisit(pid,vid){askConfirm(t('del_visit'),()=>{const p=S.patients.find(x=>x.id===pid);p.visits=p.visits.filter(v=>v.id!==vid);save();render()},t('delete'),true)}
+
+/* ================= tests / labs ================= */
+const TEST_NAMES={
+  en:['CBC (complete blood count)','ESR','CRP','Fasting blood sugar','Random blood sugar','HbA1c','General urine exam','Lipid profile','Liver function (LFT)','Kidney function (urea, creatinine)','Thyroid (TSH)','Stool exam','X-ray','Ultrasound','ECG'],
+  ar:['صورة دم كاملة (CBC)','سرعة الترسيب (ESR)','CRP','سكر صائم','سكر عشوائي','السكر التراكمي (HbA1c)','فحص إدرار عام','الدهون','وظائف الكبد','وظائف الكلى (اليوريا، الكرياتينين)','الغدة الدرقية (TSH)','فحص براز','أشعة سينية','سونار','تخطيط القلب (ECG)']};
+function editTest(pid,tid){
+  const p=S.patients.find(x=>x.id===pid);
+  const x=tid?p.tests.find(y=>y.id===tid):{date:today(),name:'',result:'',notes:''};
+  openModal(`<h2>${esc(tid?t('edit_test',{n:p.name}):t('new_test',{n:p.name}))}</h2><div class="grid">
+    <div class="full"><label>${t('col_date')}</label><input id="t_date" type="date" value="${esc(x.date)}"></div>
+    <div class="full"><label>${t('t_name')} *</label><input id="t_name" list="testNames" autocomplete="off" value="${esc(x.name)}"><datalist id="testNames">${TEST_NAMES[LANG].map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>
+    <div class="full"><label>${t('t_result')}</label><textarea id="t_result">${esc(x.result)}</textarea></div>
+    <div class="full"><label>${t('notes')}</label><textarea id="t_notes">${esc(x.notes)}</textarea></div></div>
+    <p id="t_warn" class="warn"></p>
+    <div class="row"><button class="btn" onclick="saveTest('${pid}','${tid||''}')">${t('save')}</button><button class="btn sec" onclick="closeModal()">${t('cancel')}</button></div>`);
+}
+function saveTest(pid,tid){
+  const p=S.patients.find(x=>x.id===pid);if(!p.tests)p.tests=[];
+  const d={date:$('t_date').value||today(),name:$('t_name').value.trim(),result:$('t_result').value.trim(),notes:$('t_notes').value.trim()};
+  if(!d.name){$('t_warn').textContent=t('name_required');return}
+  if(tid)Object.assign(p.tests.find(x=>x.id===tid),d);else p.tests.push(Object.assign({id:uid()},d));
+  save();closeModal();render();
+}
+function delTest(pid,tid){askConfirm(t('del_test'),()=>{const p=S.patients.find(x=>x.id===pid);p.tests=p.tests.filter(x=>x.id!==tid);save();render()},t('delete'),true)}
 
 /* ================= appointments ================= */
 const STATUSES=['scheduled','done','cancelled','noshow'];
@@ -470,7 +500,7 @@ function importData(f){
   if(!f)return;const r=new FileReader();
   r.onload=()=>{let d;try{d=JSON.parse(r.result);if(!Array.isArray(d.patients)||!Array.isArray(d.appts))throw 0}catch(e){showMsg(t('import_bad'));return}
     askConfirm(t('import_q',{p:d.patients.length,a:d.appts.length}),()=>{
-      S=Object.assign({patients:[],appts:[],pin:null},d);save();showMsg(t('import_ok'),()=>go('dash'));
+      S=migrate(Object.assign({patients:[],appts:[],pin:null},d));save();showMsg(t('import_ok'),()=>go('dash'));
     },t('confirm'),true)};
   r.readAsText(f);
 }
