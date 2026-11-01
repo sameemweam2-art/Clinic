@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f766e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Clinic">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAB4ElEQVR42u3dsRHCMBREwbOGHCqFDGogpFM6gBacWT7tNsCM9Cw8Dr626/P+C5QYlgBBg6BB0CBoBA2CBkGDoEHQCBoEDYIGQYOgETQIGgQNggZBI2gQNAgaBA2CRtAgaBA0CBoEjaBB0CBoEDQImjYXS7Df9/055Hdvr4fF32lzadDcMQtb0HUhi9o7tAdM0JwlHlELui4aUQsaQYOgQdAgaBA0ggZBg6BB0CBoBA2CBkGDoEHQCBoEDYIGQSNoEDQIGgQNgkbQIGgQNGTd+dAGE8Zs6pagxSzsiqCFLGrv0Cx/4AyLRdM+DYtE03555SC+Q4OgQdAgaAQNggZBg6BB0AgaBA2CBkGDoBE0CBoEDYIGQSNoEDQIGgQNgkbQIGgQNAgaJg76DNceMO9+OaFxQjulmXWfhsXCHSuiFnPcghXXVAhZ0B4i/2C+ciBoEDQIGgQNgkbQIGgQNAgaBI2gQdAgaBA0CBpBg6BB0CBoEDSCBkGDoEHQIGgEDYKOwYQx107QIOhFTkGns6Br4hGzoGsiEnMMPE/BEHQhCxqvHCBoEDQIGgSNoEHQIGgQNAgaQYOgQdAgaBA0ggZBg6BB0CBoBA2CBkGDoEHQCBoEDYIGQYOgETQIGgQNgmZhf5uZU5kWH80wAAAAAElFTkSuQmCC">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAACBElEQVR42u3dwbFFQBBA0TZlT6TsiMFSpjIgCKpofU4Cf8r0Neov3nTDMp0BRTWPAAGAAEAAIAAQAAgABAACAAGAAEAAIAAQAAgABAACAAGAAEAAIAAQAAgABAACAAGAAEAAIAAQAAgABAACAAGAAEAAIAB4Su8R3Hds+2t/e1xnG3BD55rUnIMvBJ9Ahv/D6xGA4bcuARh+6xMACMDb3zoFAAIAAYAAQAAgABAACAAEAAIAAYAAQAAgABAACAAEAAIAAYAAQAAgABAACAAEAAIAAYAAQAAgAMIdYbnuCPPT39+X6b6yNAEYfCGU/QQy/OFCkaoBGH4RlA3A8IvAJxBUDMDb3yngBAABgABAACAAEAAIAAQAAgABgABAACAAEAAIAAQAAgABgABAACAABAACAAGAAEAAIAAQAAgABAACCPdL8Z/9dALgBPDWoOo+Ng+PyvvXPEQq75ub4nFTvC37X3xOTf8FAgGAAEAAIAAQAAgABIAAQAAgABAACAAEAAIAAYAAQAAgABAACAAEAAIAAYAAQAAgABAACAAEAAIIv3tvnQIAATgFvP0FIALDLwARGP5wR1i4O8zgCwB8AoEAQAAgABAACAAEAAIAAYAAQAAgABAACAAEAAIAAYAAQAAgABAACAABgABAACAAEAAIAAQAAgABgABAACAAEAAIAPK6AErPVgut+q5NAAAAAElFTkSuQmCC">
+<title>Clinic Manager</title>
+<style>
+:root{--bg:#f4f6f8;--card:#fff;--ink:#1d2733;--mute:#6b7785;--line:#e1e6eb;--pri:#0f766e;--pri2:#0d5f59;--red:#c0392b;--amber:#b7791f;--green:#2f855a}
+*{box-sizing:border-box}
+body{margin:0;-webkit-text-size-adjust:100%;font:15px/1.5 system-ui,"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--pri);color:#fff;padding:0 20px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+header h1{font-size:18px;margin:0;padding:14px 0}
+nav{display:flex;gap:4px}
+nav button{background:none;border:0;color:#d5efec;padding:16px 14px;font:inherit;cursor:pointer;border-bottom:3px solid transparent}
+nav button.on,nav button:hover{color:#fff;border-bottom-color:#fff}
+.langbtn{margin-inline-start:auto;background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:7px;padding:6px 14px;font:inherit;cursor:pointer}
+.langbtn:hover{background:rgba(255,255,255,.3)}
+main{max-width:1050px;margin:20px auto;padding:0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:16px}
+.card h2{margin:0 0 12px;font-size:17px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.grow{flex:1}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+.stat b{display:block;font-size:28px;color:var(--pri)}
+.stat span{color:var(--mute)}
+button.btn{background:var(--pri);color:#fff;border:0;border-radius:7px;padding:9px 15px;font:inherit;font-size:14px;cursor:pointer}
+button.btn:hover{background:var(--pri2)}
+button.btn.sec{background:#e8edf1;color:var(--ink)}
+button.btn.sec:hover{background:#dbe2e8}
+button.btn.red{background:var(--red)}
+button.sm{padding:5px 10px;font-size:13px}
+input,select,textarea{font:inherit;padding:8px 10px;border:1px solid #c9d1d9;border-radius:7px;width:100%;background:#fff;color:var(--ink)}
+textarea{min-height:70px;resize:vertical}
+label{display:block;font-size:13px;color:var(--mute);margin-bottom:3px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.grid .full{grid-column:1/-1}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:start;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;color:var(--mute);font-weight:600}
+tr.click{cursor:pointer}
+tr.click:hover{background:#f0f7f6}
+.tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600}
+.tag.scheduled{background:#e0efff;color:#1b5fa8}
+.tag.done{background:#dcf3e6;color:var(--green)}
+.tag.cancelled{background:#f6dcd8;color:var(--red)}
+.tag.noshow{background:#fbefd5;color:var(--amber)}
+.mute{color:var(--mute)}
+.alert{background:#fff7e0;border:1px solid #f0d98a;border-radius:8px;padding:10px 12px;font-size:14px}
+.warn{color:var(--red);font-weight:600}
+.overlay{position:fixed;inset:0;background:rgba(20,30,40,.5);display:flex;align-items:flex-start;justify-content:center;padding:30px 12px;overflow:auto;z-index:10}
+.modal{background:#fff;border-radius:12px;padding:22px;width:100%;max-width:620px}
+.modal h2{margin-top:0}
+.lock{position:fixed;inset:0;background:var(--pri);display:flex;align-items:center;justify-content:center;z-index:20}
+.lock>div{background:#fff;padding:28px;border-radius:12px;width:300px;text-align:center}
+.visit{border-inline-start:3px solid var(--pri);padding:6px 12px;margin-bottom:12px;background:#fafcfc}
+.empty{padding:22px;text-align:center;color:var(--mute)}
+input[type=date],input[type=time],input[type=tel]{direction:ltr;text-align:start}
+[dir=rtl] input[type=date],[dir=rtl] input[type=time]{text-align:right}
+.dlg-ov{position:fixed;inset:0;background:rgba(20,30,40,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.dlg{background:#fff;border-radius:12px;padding:22px;width:100%;max-width:420px;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+@media print{header,.noprint{display:none!important}.card{border:0}}
+@media(max-width:700px){
+header{padding:0 12px;gap:0}
+header h1{flex:1;padding:12px 0 4px;font-size:17px}
+.langbtn{order:2;margin:0}
+nav{order:3;width:100%;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{white-space:nowrap;padding:10px 12px}
+main{margin:12px auto;padding:0 10px}
+.card{padding:14px}
+.grid{grid-template-columns:1fr}
+input,select,textarea{font-size:16px}
+button.btn{padding:11px 16px;min-height:42px}
+button.sm{padding:8px 12px;min-height:38px;font-size:14px}
+.overlay{padding:12px 8px}
+.modal{padding:16px}
+.dlg{padding:18px}
+table.stack,table.stack tbody{display:block}
+table.stack tr.hd{display:none}
+table.stack tr{display:block;border:1px solid var(--line);border-radius:8px;padding:6px 10px;margin-bottom:10px;background:var(--card)}
+table.stack td{display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;padding:5px 0;text-align:end}
+table.stack td::before{content:attr(data-l);color:var(--mute);font-size:13px;text-align:start;flex-shrink:0}
+table.stack td:empty{display:none}
+table.stack td.act{justify-content:flex-end}
+table.stack td.act::before{content:none}
+}
+</style>
+</head>
+<body>
+<div id="lock" class="lock" style="display:none"><div>
+  <h2 style="margin-top:0" id="lockTitle"></h2>
+  <p class="mute" id="lockMsg"></p>
+  <input id="pinIn" type="password" inputmode="numeric" autocomplete="off" style="text-align:center;font-size:20px;margin-bottom:12px">
+  <button class="btn" style="width:100%" id="lockBtn" onclick="unlock()"></button>
+  <p id="pinErr" class="warn"></p>
+  <button class="btn sec sm" onclick="toggleLang()" id="lockLang"></button>
+</div></div>
+
+<header>
+  <h1 id="appTitle"></h1>
+  <nav id="nav"></nav>
+  <button class="langbtn" id="langBtn" onclick="toggleLang()"></button>
+</header>
+<main id="main"></main>
+<div id="modalHost"></div>
+<div id="dlgHost"></div>
+
+<script>
+/* ================= translations ================= */
+const TR={
+en:{
+app:'🩺 Clinic Manager',
+nav_dash:'Dashboard',nav_patients:'Patients',nav_appts:'Appointments',nav_backup:'Backup & Settings',
+lang_btn:'العربية',
+lock_msg:'Enter your PIN',unlock:'Unlock',wrong_pin:'Wrong PIN',
+total_patients:'Total patients',appts_today:'Appointments today',waiting_today:'Still waiting today',next7:'Next 7 days',
+today_h:'Today — {d}',new_appt:'+ New appointment',coming_up:'Coming up (next 7 days)',nothing:'Nothing here.',
+col_date:'Date',col_time:'Time',col_patient:'Patient',col_reason:'Reason',col_status:'Status',
+col_name:'Name',col_age:'Age',col_sex:'Sex',col_phone:'Phone',col_conditions:'Conditions',
+st_scheduled:'Scheduled',st_done:'Completed',st_cancelled:'Cancelled',st_noshow:'No-show',
+patients_h:'Patients ({n})',add_patient:'+ Add patient',search_ph:'Search by name, phone, or condition…',no_patients:'No patients yet. Click “Add patient”.',
+deleted_patient:'(deleted patient)',
+edit:'Edit',new:'New',patient:'patient',edit_patient:'Edit patient',new_patient:'New patient',
+f_name:'Full name *',f_dob:'Date of birth',f_sex:'Sex',f_phone:'Phone',f_address:'Address',f_allergies:'Allergies',f_conditions:'Chronic conditions',f_notes:'General notes',
+male:'Male',female:'Female',other:'Other',
+save:'Save',cancel:'Cancel',delete:'Delete',print:'Print',
+name_required:'Name is required.',
+del_patient:'Delete this patient and all their visit notes? This cannot be undone.',
+del_patient_appts:'Delete this patient, all their visit notes and {n} appointment(s)? This cannot be undone.',
+back_all:'← All patients',
+years:'{n} years',
+notes:'Notes',
+visit_hist:'Visit history',add_visit:'+ Add visit',no_visits:'No visits recorded.',
+complaint:'Complaint',diagnosis:'Diagnosis',treatment:'Treatment / prescription',
+f_complaint:'Complaint / symptoms',
+edit_visit:'Edit visit — {n}',new_visit:'New visit — {n}',
+del_visit:'Delete this visit record?',
+appts_h:'Appointments',book_appt:'+ Book appointment',no_appts:'No appointments.',
+f_today:'Today',f_upcoming:'Upcoming',f_all:'All (newest first)',no_appts_view:'No appointments in this view.',
+add_patient_first:'Add a patient first.',
+edit_appt:'Edit appointment',new_appt_t:'New appointment',
+f_patient:'Patient *',choose:'— choose —',f_date:'Date *',f_time:'Time *',f_reason:'Reason',f_status:'Status',
+appt_required:'Patient, date and time are required.',
+clash:'{p} already has an appointment at {t} on that day. Book anyway?',
+del_appt:'Delete this appointment?',
+backup_h:'Backup your data',
+backup_warn:'Your data is stored inside this browser on this computer only. Clearing browser data or switching browsers/computers will make it disappear. <b>Export a backup regularly</b> and keep copies on an encrypted USB drive.',
+export:'⬇ Export backup (.json)',import:'⬆ Import backup',
+import_note:'Importing replaces everything currently in the app.',
+pin_h:'PIN lock',
+pin_note:'A PIN stops casual access when the app is opened. It does not encrypt the data, so also protect your Windows account and use disk encryption (BitLocker).',
+pin_on:'PIN is on',change_pin:'Change PIN',remove_pin:'Remove PIN',set_pin:'Set a PIN',
+pin_prompt:'Choose a PIN (at least 4 characters):',pin_short:'PIN too short.',pin_set:'PIN set. It will be required each time you open the app.',
+pin_remove_q:'Remove PIN lock?',
+about_h:'About',about_t:'Works offline. No account, no subscription, nothing is sent over the internet.',
+cnt_p:'Patients',cnt_a:'Appointments',
+import_q:'Replace current data with this backup ({p} patients, {a} appointments)?',
+import_ok:'Backup restored.',import_bad:'That file is not a valid backup.',
+save_fail:'Could not save. Storage may be full or blocked by the browser.',
+not_found:'Patient not found.',ok:'OK',confirm:'Confirm',no_storage:'WARNING: this browser is not letting the page save data, so everything you enter will be lost when you close it. Open the file directly in Chrome (not from inside WhatsApp or another app), or use the hosted version.',
+tab_ph_age:''
+},
+ar:{
+app:'🩺 إدارة العيادة',
+nav_dash:'لوحة التحكم',nav_patients:'المرضى',nav_appts:'المواعيد',nav_backup:'النسخ الاحتياطي والإعدادات',
+lang_btn:'English',
+lock_msg:'أدخل رمز PIN',unlock:'فتح',wrong_pin:'رمز PIN غير صحيح',
+total_patients:'إجمالي المرضى',appts_today:'مواعيد اليوم',waiting_today:'بانتظار الكشف اليوم',next7:'الأيام السبعة القادمة',
+today_h:'اليوم — {d}',new_appt:'+ موعد جديد',coming_up:'المواعيد القادمة (٧ أيام)',nothing:'لا يوجد شيء هنا.',
+col_date:'التاريخ',col_time:'الوقت',col_patient:'المريض',col_reason:'السبب',col_status:'الحالة',
+col_name:'الاسم',col_age:'العمر',col_sex:'الجنس',col_phone:'الهاتف',col_conditions:'الأمراض',
+st_scheduled:'محجوز',st_done:'تم',st_cancelled:'ملغي',st_noshow:'لم يحضر',
+patients_h:'المرضى ({n})',add_patient:'+ إضافة مريض',search_ph:'ابحث بالاسم أو الهاتف أو المرض…',no_patients:'لا يوجد مرضى بعد. اضغط «إضافة مريض».',
+deleted_patient:'(مريض محذوف)',
+edit:'تعديل',new:'جديد',patient:'مريض',edit_patient:'تعديل بيانات المريض',new_patient:'مريض جديد',
+f_name:'الاسم الكامل *',f_dob:'تاريخ الميلاد',f_sex:'الجنس',f_phone:'الهاتف',f_address:'العنوان',f_allergies:'الحساسية',f_conditions:'الأمراض المزمنة',f_notes:'ملاحظات عامة',
+male:'ذكر',female:'أنثى',other:'آخر',
+save:'حفظ',cancel:'إلغاء',delete:'حذف',print:'طباعة',
+name_required:'الاسم مطلوب.',
+del_patient:'حذف هذا المريض وجميع سجلات زياراته؟ لا يمكن التراجع عن ذلك.',
+del_patient_appts:'حذف هذا المريض وجميع سجلات زياراته و{n} من المواعيد؟ لا يمكن التراجع عن ذلك.',
+back_all:'→ كل المرضى',
+years:'{n} سنة',
+notes:'ملاحظات',
+visit_hist:'سجل الزيارات',add_visit:'+ إضافة زيارة',no_visits:'لا توجد زيارات مسجلة.',
+complaint:'الشكوى',diagnosis:'التشخيص',treatment:'العلاج / الوصفة الطبية',
+f_complaint:'الشكوى / الأعراض',
+edit_visit:'تعديل زيارة — {n}',new_visit:'زيارة جديدة — {n}',
+del_visit:'حذف سجل هذه الزيارة؟',
+appts_h:'المواعيد',book_appt:'+ حجز موعد',no_appts:'لا توجد مواعيد.',
+f_today:'اليوم',f_upcoming:'القادمة',f_all:'الكل (الأحدث أولاً)',no_appts_view:'لا توجد مواعيد في هذا العرض.',
+add_patient_first:'أضف مريضاً أولاً.',
+edit_appt:'تعديل الموعد',new_appt_t:'موعد جديد',
+f_patient:'المريض *',choose:'— اختر —',f_date:'التاريخ *',f_time:'الوقت *',f_reason:'السبب',f_status:'الحالة',
+appt_required:'المريض والتاريخ والوقت مطلوبة.',
+clash:'لدى {p} موعد في الساعة {t} في نفس اليوم. هل تريد الحجز رغم ذلك؟',
+del_appt:'حذف هذا الموعد؟',
+backup_h:'النسخ الاحتياطي لبياناتك',
+backup_warn:'بياناتك محفوظة داخل هذا المتصفح وعلى هذا الجهاز فقط. مسح بيانات المتصفح أو تغيير المتصفح/الجهاز سيجعلها تختفي. <b>صدّر نسخة احتياطية بانتظام</b> واحتفظ بنسخ على فلاشة مشفّرة.',
+export:'⬇ تصدير نسخة احتياطية (.json)',import:'⬆ استيراد نسخة احتياطية',
+import_note:'الاستيراد يستبدل كل ما في التطبيق حالياً.',
+pin_h:'قفل PIN',
+pin_note:'رمز PIN يمنع الوصول العابر عند فتح التطبيق، لكنه لا يشفّر البيانات. احمِ حساب ويندوز أيضاً وفعّل تشفير القرص (BitLocker).',
+pin_on:'رمز PIN مفعّل',change_pin:'تغيير الرمز',remove_pin:'إزالة الرمز',set_pin:'تعيين رمز PIN',
+pin_prompt:'اختر رمز PIN (٤ خانات على الأقل):',pin_short:'الرمز قصير جداً.',pin_set:'تم تعيين الرمز. سيُطلب في كل مرة تفتح فيها التطبيق.',
+pin_remove_q:'إزالة قفل PIN؟',
+about_h:'حول التطبيق',about_t:'يعمل بدون إنترنت. بلا حساب ولا اشتراك، ولا يُرسل أي شيء عبر الإنترنت.',
+cnt_p:'المرضى',cnt_a:'المواعيد',
+import_q:'استبدال البيانات الحالية بهذه النسخة ({p} مريض، {a} موعد)؟',
+import_ok:'تمت استعادة النسخة الاحتياطية.',import_bad:'هذا الملف ليس نسخة احتياطية صالحة.',
+save_fail:'تعذّر الحفظ. قد تكون مساحة التخزين ممتلئة أو محجوبة من المتصفح.',
+not_found:'لم يتم العثور على المريض.',ok:'حسناً',confirm:'تأكيد',no_storage:'تحذير: المتصفح لا يسمح للصفحة بحفظ البيانات، وكل ما تدخله سيضيع عند إغلاقها. افتح الملف مباشرة من Chrome (وليس من داخل واتساب أو تطبيق آخر)، أو استخدم النسخة المستضافة.',
+tab_ph_age:''
+}};
+let LANG='en';
+try{const s=localStorage.getItem('clinic_lang');LANG=(s==='ar'||s==='en')?s:((navigator.language||'').toLowerCase().startsWith('ar')?'ar':'en')}catch(e){}
+function t(k,p){let s=(TR[LANG][k]!==undefined?TR[LANG][k]:TR.en[k])||k;if(p)for(const x in p)s=s.split('{'+x+'}').join(p[x]);return s}
+const locale=()=>LANG==='ar'?'ar-u-nu-latn':'en';
+function applyLang(){
+  document.documentElement.lang=LANG;document.documentElement.dir=LANG==='ar'?'rtl':'ltr';
+  document.title=t('app').replace('🩺 ','');
+  $('appTitle').textContent=t('app');$('langBtn').textContent=t('lang_btn');$('lockLang').textContent=t('lang_btn');
+  $('lockTitle').textContent=t('app');$('lockMsg').textContent=t('lock_msg');$('lockBtn').textContent=t('unlock');
+}
+function toggleLang(){LANG=LANG==='ar'?'en':'ar';try{localStorage.setItem('clinic_lang',LANG)}catch(e){}closeModal();applyLang();render()}
+
+/* ================= data ================= */
+let STORAGE_OK=true;try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){STORAGE_OK=false}
+const KEY='clinic_data_v1';
+let S={patients:[],appts:[],pin:null};
+let view='dash', curPatient=null, apptFilter='upcoming', q='';
+
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d)S=Object.assign({patients:[],appts:[],pin:null},d)}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){showMsg(t('save_fail'))}}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function today(){return ymd(new Date())}
+function addDays(n){const d=new Date();d.setDate(d.getDate()+n);return ymd(d)}
+function age(dob){if(!dob)return'';const b=new Date(dob),n=new Date();let a=n.getFullYear()-b.getFullYear();const m=n.getMonth()-b.getMonth();if(m<0||(m===0&&n.getDate()<b.getDate()))a--;return isNaN(a)?'':a}
+function fdate(s){if(!s)return'';const d=new Date(s+'T00:00:00');return isNaN(d)?s:d.toLocaleDateString(locale(),{weekday:'short',year:'numeric',month:'short',day:'numeric'})}
+const pname=id=>{const p=S.patients.find(x=>x.id===id);return p?p.name:t('deleted_patient')};
+const stLabel=k=>t('st_'+k);
+const SEX={Male:'male',Female:'female',Other:'other'};
+const sexLabel=v=>SEX[v]?t(SEX[v]):(v||'');
+const byName=(a,b)=>a.name.localeCompare(b.name,LANG==='ar'?'ar':undefined);
+
+/* ================= PIN lock (screen lock, not encryption) ================= */
+function hash(s){let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return 'h'+h}
+function unlock(){if(hash($('pinIn').value)===S.pin){$('lock').style.display='none';$('pinIn').value='';$('pinErr').textContent='';render()}else{$('pinErr').textContent=t('wrong_pin')}}
+$('pinIn').addEventListener('keydown',e=>{if(e.key==='Enter')unlock()});
+function setPin(){askPin(p=>{S.pin=hash(p);save();showMsg(t('pin_set'),render)})}
+function clearPin(){askConfirm(t('pin_remove_q'),()=>{S.pin=null;save();render()},t('remove_pin'),true)}
+
+/* ================= navigation ================= */
+function go(v,pid){view=v;curPatient=pid||null;q='';render()}
+function renderNav(){
+  const items=[['dash','nav_dash'],['patients','nav_patients'],['appts','nav_appts'],['backup','nav_backup']];
+  $('nav').innerHTML=items.map(([k,l])=>`<button class="${(view===k||(view==='patient'&&k==='patients'))?'on':''}" onclick="go('${k}')">${t(l)}</button>`).join('');
+}
+function render(){
+  renderNav();
+  let h;
+  if(view==='dash')h=vDash();
+  else if(view==='patients')h=vPatients();
+  else if(view==='patient')h=vPatient();
+  else if(view==='appts')h=vAppts();
+  else h=vBackup();
+  const warn=STORAGE_OK?'':`<div class="alert" style="margin-bottom:12px;border-color:#c0392b;color:#c0392b;font-weight:600">${esc(t('no_storage'))}</div>`;
+  $('main').innerHTML=warn+h;
+}
+
+/* ================= modal ================= */
+function openModal(html){$('modalHost').innerHTML=`<div class="overlay" onmousedown="if(event.target===this)closeModal()"><div class="modal">${html}</div></div>`}
+function closeModal(){$('modalHost').innerHTML=''}
+
+/* ===== in-page dialogs (replace browser confirm/alert/prompt, which browsers can block) ===== */
+function dlgClose(){$('dlgHost').innerHTML=''}
+function askConfirm(msg,onYes,label,danger){
+  $('dlgHost').innerHTML=`<div class="dlg-ov"><div class="dlg"><p style="margin-top:0;white-space:pre-wrap">${esc(msg)}</p><div class="row" style="margin:16px 0 0"><button class="btn ${danger?'red':''}" id="dlgYes">${esc(label||t('confirm'))}</button><button class="btn sec" id="dlgNo">${t('cancel')}</button></div></div></div>`;
+  $('dlgYes').onclick=()=>{dlgClose();onYes()};
+  $('dlgNo').onclick=dlgClose;
+  $('dlgNo').focus();
+}
+function showMsg(msg,after){
+  $('dlgHost').innerHTML=`<div class="dlg-ov"><div class="dlg"><p style="margin-top:0;white-space:pre-wrap">${esc(msg)}</p><div class="row" style="margin:16px 0 0"><button class="btn" id="dlgOk">${t('ok')}</button></div></div></div>`;
+  $('dlgOk').onclick=()=>{dlgClose();if(after)after()};
+  $('dlgOk').focus();
+}
+function askPin(onOk){
+  $('dlgHost').innerHTML=`<div class="dlg-ov"><div class="dlg"><p style="margin-top:0">${esc(t('pin_prompt'))}</p><input id="dlgPin" type="password" inputmode="numeric" autocomplete="off"><p id="dlgErr" class="warn"></p><div class="row" style="margin:8px 0 0"><button class="btn" id="dlgYes">${t('save')}</button><button class="btn sec" id="dlgNo">${t('cancel')}</button></div></div></div>`;
+  const submit=()=>{const v=$('dlgPin').value;if(v.length<4){$('dlgErr').textContent=t('pin_short');return}dlgClose();onOk(v)};
+  $('dlgYes').onclick=submit;$('dlgNo').onclick=dlgClose;
+  $('dlgPin').addEventListener('keydown',e=>{if(e.key==='Enter')submit()});
+  $('dlgPin').focus();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('dlgHost').innerHTML)dlgClose();else closeModal()}});
+
+/* ================= dashboard ================= */
+const sortAppts=l=>l.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+const dl=k=>'data-l="'+esc(t(k))+'"';
+function apptRows(list,showDate){
+  if(!list.length)return`<div class="empty">${t('nothing')}</div>`;
+  return `<table class="stack"><tr class="hd"><th>${showDate?t('col_date'):''}</th><th>${t('col_time')}</th><th>${t('col_patient')}</th><th>${t('col_reason')}</th><th>${t('col_status')}</th></tr>`+
+    list.map(a=>`<tr class="click" onclick="go('patient','${a.pid}')"><td ${dl('col_date')}>${showDate?esc(fdate(a.date)):''}</td><td ${dl('col_time')}><span dir="ltr">${esc(a.time)}</span></td><td ${dl('col_patient')}><b>${esc(pname(a.pid))}</b></td><td ${dl('col_reason')}>${esc(a.reason)}</td><td ${dl('col_status')}><span class="tag ${a.status}">${stLabel(a.status)}</span></td></tr>`).join('')+'</table>';
+}
+function vDash(){
+  const tt=today();
+  const td=sortAppts(S.appts.filter(a=>a.date===tt&&a.status!=='cancelled'));
+  const up=sortAppts(S.appts.filter(a=>a.date>tt&&a.date<=addDays(7)&&a.status==='scheduled'));
+  const left=td.filter(a=>a.status==='scheduled').length;
+  return `<div class="stats">
+    <div class="stat"><b>${S.patients.length}</b><span>${t('total_patients')}</span></div>
+    <div class="stat"><b>${td.length}</b><span>${t('appts_today')}</span></div>
+    <div class="stat"><b>${left}</b><span>${t('waiting_today')}</span></div>
+    <div class="stat"><b>${up.length}</b><span>${t('next7')}</span></div></div>
+  <div class="card"><div class="row"><h2 class="grow" style="margin:0">${esc(t('today_h',{d:fdate(tt)}))}</h2><button class="btn" onclick="editAppt()">${t('new_appt')}</button></div>${apptRows(td,false)}</div>
+  <div class="card"><h2>${t('coming_up')}</h2>${apptRows(up,true)}</div>`;
+}
+
+/* ================= patients ================= */
+function vPatients(){
+  const needle=q.toLowerCase();
+  const list=S.patients.filter(p=>!needle||((p.name||'')+' '+(p.phone||'')+' '+(p.conditions||'')).toLowerCase().includes(needle)).sort(byName);
+  return `<div class="card"><div class="row"><h2 class="grow" style="margin:0">${t('patients_h',{n:S.patients.length})}</h2><button class="btn" onclick="editPatient()">${t('add_patient')}</button></div>
+  <div class="row"><input id="search" placeholder="${esc(t('search_ph'))}" value="${esc(q)}" oninput="q=this.value;keepFocus()"></div>
+  ${list.length?`<table class="stack"><tr class="hd"><th>${t('col_name')}</th><th>${t('col_age')}</th><th>${t('col_sex')}</th><th>${t('col_phone')}</th><th>${t('col_conditions')}</th></tr>`+list.map(p=>`<tr class="click" onclick="go('patient','${p.id}')"><td ${dl('col_name')}><b>${esc(p.name)}</b></td><td ${dl('col_age')}>${age(p.dob)}</td><td ${dl('col_sex')}>${esc(sexLabel(p.sex))}</td><td ${dl('col_phone')}><span dir="ltr">${esc(p.phone)}</span></td><td ${dl('col_conditions')}>${esc(p.conditions)}</td></tr>`).join('')+'</table>':`<div class="empty">${t('no_patients')}</div>`}</div>`;
+}
+function keepFocus(){const pos=$('search').selectionStart;render();const s=$('search');s.focus();s.setSelectionRange(pos,pos)}
+
+function editPatient(id){
+  const p=id?S.patients.find(x=>x.id===id):{name:'',dob:'',sex:'',phone:'',address:'',allergies:'',conditions:'',notes:''};
+  openModal(`<h2>${id?t('edit_patient'):t('new_patient')}</h2><div class="grid">
+    <div class="full"><label>${t('f_name')}</label><input id="f_name" value="${esc(p.name)}"></div>
+    <div><label>${t('f_dob')}</label><input id="f_dob" type="date" value="${esc(p.dob)}"></div>
+    <div><label>${t('f_sex')}</label><select id="f_sex"><option value=""></option>${['Male','Female','Other'].map(s=>`<option value="${s}" ${p.sex===s?'selected':''}>${sexLabel(s)}</option>`).join('')}</select></div>
+    <div><label>${t('f_phone')}</label><input id="f_phone" type="tel" value="${esc(p.phone)}"></div>
+    <div><label>${t('f_address')}</label><input id="f_address" value="${esc(p.address)}"></div>
+    <div class="full"><label>${t('f_allergies')}</label><input id="f_allergies" value="${esc(p.allergies)}"></div>
+    <div class="full"><label>${t('f_conditions')}</label><input id="f_conditions" value="${esc(p.conditions)}"></div>
+    <div class="full"><label>${t('f_notes')}</label><textarea id="f_notes">${esc(p.notes)}</textarea></div></div>
+    <div class="row" style="margin-top:14px"><button class="btn" onclick="savePatient('${id||''}')">${t('save')}</button><button class="btn sec" onclick="closeModal()">${t('cancel')}</button></div>`);
+  $('f_name').focus();
+}
+function savePatient(id){
+  const name=$('f_name').value.trim();if(!name){showMsg(t('name_required'));return}
+  const d={name,dob:$('f_dob').value,sex:$('f_sex').value,phone:$('f_phone').value.trim(),address:$('f_address').value.trim(),allergies:$('f_allergies').value.trim(),conditions:$('f_conditions').value.trim(),notes:$('f_notes').value.trim()};
+  if(id){Object.assign(S.patients.find(x=>x.id===id),d)}else{const n=Object.assign({id:uid(),visits:[],created:today()},d);S.patients.push(n);id=n.id}
+  save();closeModal();go('patient',id);
+}
+function delPatient(id){
+  const n=S.appts.filter(a=>a.pid===id).length;
+  askConfirm(n?t('del_patient_appts',{n}):t('del_patient'),()=>{
+    S.patients=S.patients.filter(p=>p.id!==id);S.appts=S.appts.filter(a=>a.pid!==id);save();go('patients');
+  },t('delete'),true);
+}
+
+/* ================= single patient ================= */
+function vPatient(){
+  const p=S.patients.find(x=>x.id===curPatient);
+  if(!p)return`<div class="card empty">${t('not_found')}</div>`;
+  const visits=(p.visits||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
+  const ap=sortAppts(S.appts.filter(a=>a.pid===p.id)).reverse();
+  const row=(k,v)=>v?`<div><label>${k}</label>${esc(v)}</div>`:'';
+  const a=age(p.dob);
+  const ageTxt=a!==''?t('years',{n:a})+(p.dob?' ('+p.dob+')':''):'';
+  return `<div class="row noprint"><button class="btn sec sm" onclick="go('patients')">${t('back_all')}</button></div>
+  <div class="card"><div class="row"><h2 class="grow" style="margin:0">${esc(p.name)}</h2>
+    <button class="btn sec sm noprint" onclick="window.print()">${t('print')}</button>
+    <button class="btn sec sm noprint" onclick="editPatient('${p.id}')">${t('edit')}</button>
+    <button class="btn red sm noprint" onclick="delPatient('${p.id}')">${t('delete')}</button></div>
+    <div class="grid">${row(t('col_age'),ageTxt)}${row(t('col_sex'),sexLabel(p.sex))}${row(t('col_phone'),p.phone)}${row(t('f_address'),p.address)}
+    ${p.allergies?`<div class="full"><label>${t('f_allergies')}</label><span class="warn">${esc(p.allergies)}</span></div>`:''}
+    ${row(t('f_conditions'),p.conditions)}${row(t('notes'),p.notes)}</div></div>
+  <div class="card"><div class="row"><h2 class="grow" style="margin:0">${t('visit_hist')}</h2><button class="btn noprint" onclick="editVisit('${p.id}')">${t('add_visit')}</button></div>
+    ${visits.length?visits.map(v=>`<div class="visit"><div class="row" style="margin-bottom:4px"><b class="grow">${esc(fdate(v.date))}</b><span class="noprint"><button class="btn sec sm" onclick="editVisit('${p.id}','${v.id}')">${t('edit')}</button> <button class="btn red sm" onclick="delVisit('${p.id}','${v.id}')">${t('delete')}</button></span></div>
+      ${v.complaint?`<div><span class="mute">${t('complaint')}:</span> ${esc(v.complaint)}</div>`:''}${v.diagnosis?`<div><span class="mute">${t('diagnosis')}:</span> ${esc(v.diagnosis)}</div>`:''}${v.treatment?`<div style="white-space:pre-wrap"><span class="mute">${t('treatment')}:</span> ${esc(v.treatment)}</div>`:''}</div>`).join(''):`<div class="empty">${t('no_visits')}</div>`}</div>
+  <div class="card noprint"><div class="row"><h2 class="grow" style="margin:0">${t('appts_h')}</h2><button class="btn" onclick="editAppt(null,'${p.id}')">${t('book_appt')}</button></div>${ap.length?apptTable(ap,false):`<div class="empty">${t('no_appts')}</div>`}</div>`;
+}
+function editVisit(pid,vid){
+  const p=S.patients.find(x=>x.id===pid);
+  const v=vid?p.visits.find(x=>x.id===vid):{date:today(),complaint:'',diagnosis:'',treatment:''};
+  openModal(`<h2>${esc(vid?t('edit_visit',{n:p.name}):t('new_visit',{n:p.name}))}</h2><div class="grid">
+    <div class="full"><label>${t('col_date')}</label><input id="v_date" type="date" value="${esc(v.date)}"></div>
+    <div class="full"><label>${t('f_complaint')}</label><textarea id="v_complaint">${esc(v.complaint)}</textarea></div>
+    <div class="full"><label>${t('diagnosis')}</label><textarea id="v_diagnosis">${esc(v.diagnosis)}</textarea></div>
+    <div class="full"><label>${t('treatment')}</label><textarea id="v_treatment">${esc(v.treatment)}</textarea></div></div>
+    <div class="row" style="margin-top:14px"><button class="btn" onclick="saveVisit('${pid}','${vid||''}')">${t('save')}</button><button class="btn sec" onclick="closeModal()">${t('cancel')}</button></div>`);
+}
+function saveVisit(pid,vid){
+  const p=S.patients.find(x=>x.id===pid);if(!p.visits)p.visits=[];
+  const d={date:$('v_date').value||today(),complaint:$('v_complaint').value.trim(),diagnosis:$('v_diagnosis').value.trim(),treatment:$('v_treatment').value.trim()};
+  if(vid)Object.assign(p.visits.find(x=>x.id===vid),d);else p.visits.push(Object.assign({id:uid()},d));
+  save();closeModal();render();
+}
+function delVisit(pid,vid){askConfirm(t('del_visit'),()=>{const p=S.patients.find(x=>x.id===pid);p.visits=p.visits.filter(v=>v.id!==vid);save();render()},t('delete'),true)}
+
+/* ================= appointments ================= */
+const STATUSES=['scheduled','done','cancelled','noshow'];
+function apptTable(list,showPatient){
+  return `<table class="stack"><tr class="hd"><th>${t('col_date')}</th><th>${t('col_time')}</th>${showPatient?`<th>${t('col_patient')}</th>`:''}<th>${t('col_reason')}</th><th>${t('col_status')}</th><th></th></tr>`+
+  list.map(a=>`<tr><td ${dl('col_date')}>${esc(fdate(a.date))}</td><td ${dl('col_time')}><span dir="ltr">${esc(a.time)}</span></td>${showPatient?`<td ${dl('col_patient')}><a href="#" onclick="go('patient','${a.pid}');return false">${esc(pname(a.pid))}</a></td>`:''}<td ${dl('col_reason')}>${esc(a.reason)}</td>
+  <td ${dl('col_status')}><select onchange="setStatus('${a.id}',this.value)" style="width:auto">${STATUSES.map(k=>`<option value="${k}" ${a.status===k?'selected':''}>${stLabel(k)}</option>`).join('')}</select></td>
+  <td class="act" style="white-space:nowrap"><button class="btn sec sm" onclick="editAppt('${a.id}')">${t('edit')}</button> <button class="btn red sm" onclick="delAppt('${a.id}')">✕</button></td></tr>`).join('')+'</table>';
+}
+function vAppts(){
+  const tt=today();let list;
+  if(apptFilter==='today')list=S.appts.filter(a=>a.date===tt);
+  else if(apptFilter==='upcoming')list=S.appts.filter(a=>a.date>=tt&&a.status==='scheduled');
+  else list=S.appts.slice();
+  list=sortAppts(list);if(apptFilter==='all')list.reverse();
+  const f=(k,l)=>`<button class="btn ${apptFilter===k?'':'sec'} sm" onclick="apptFilter='${k}';render()">${t(l)}</button>`;
+  return `<div class="card"><div class="row"><h2 class="grow" style="margin:0">${t('appts_h')}</h2><button class="btn" onclick="editAppt()">${t('new_appt')}</button></div>
+  <div class="row">${f('today','f_today')}${f('upcoming','f_upcoming')}${f('all','f_all')}</div>
+  ${list.length?apptTable(list,true):`<div class="empty">${t('no_appts_view')}</div>`}</div>`;
+}
+function editAppt(id,pid){
+  if(!S.patients.length){showMsg(t('add_patient_first'),()=>go('patients'));return}
+  const a=id?S.appts.find(x=>x.id===id):{pid:pid||'',date:today(),time:'09:00',reason:'',status:'scheduled'};
+  const ps=S.patients.slice().sort(byName);
+  openModal(`<h2>${id?t('edit_appt'):t('new_appt_t')}</h2><div class="grid">
+    <div class="full"><label>${t('f_patient')}</label><select id="a_pid"><option value="">${t('choose')}</option>${ps.map(p=>`<option value="${p.id}" ${a.pid===p.id?'selected':''}>${esc(p.name)}${p.phone?' · '+esc(p.phone):''}</option>`).join('')}</select></div>
+    <div><label>${t('f_date')}</label><input id="a_date" type="date" value="${esc(a.date)}"></div>
+    <div><label>${t('f_time')}</label><input id="a_time" type="time" value="${esc(a.time)}"></div>
+    <div class="full"><label>${t('f_reason')}</label><input id="a_reason" value="${esc(a.reason)}"></div>
+    <div class="full"><label>${t('f_status')}</label><select id="a_status">${STATUSES.map(k=>`<option value="${k}" ${a.status===k?'selected':''}>${stLabel(k)}</option>`).join('')}</select></div></div>
+    <p id="a_warn" class="warn"></p>
+    <div class="row"><button class="btn" onclick="saveAppt('${id||''}')">${t('save')}</button><button class="btn sec" onclick="closeModal()">${t('cancel')}</button></div>`);
+}
+function saveAppt(id){
+  const d={pid:$('a_pid').value,date:$('a_date').value,time:$('a_time').value,reason:$('a_reason').value.trim(),status:$('a_status').value};
+  if(!d.pid||!d.date||!d.time){$('a_warn').textContent=t('appt_required');return}
+  const clash=S.appts.find(x=>x.id!==id&&x.date===d.date&&x.time===d.time&&x.status!=='cancelled');
+  const commit=()=>{
+    if(id)Object.assign(S.appts.find(x=>x.id===id),d);else S.appts.push(Object.assign({id:uid()},d));
+    save();closeModal();render();
+  };
+  if(clash)askConfirm(t('clash',{p:pname(clash.pid),t:d.time}),commit,t('confirm'),false);else commit();
+}
+function setStatus(id,s){S.appts.find(a=>a.id===id).status=s;save();render()}
+function delAppt(id){askConfirm(t('del_appt'),()=>{S.appts=S.appts.filter(a=>a.id!==id);save();render()},t('delete'),true)}
+
+/* ================= backup ================= */
+function vBackup(){
+  return `<div class="card"><h2>${t('backup_h')}</h2>
+  <p class="alert">${t('backup_warn')}</p>
+  <div class="row"><button class="btn" onclick="exportData()">${t('export')}</button>
+  <button class="btn sec" onclick="$('imp').click()">${t('import')}</button>
+  <input id="imp" type="file" accept=".json,application/json" style="display:none" onchange="importData(this.files[0])"></div>
+  <p class="mute">${t('import_note')}</p></div>
+  <div class="card"><h2>${t('pin_h')}</h2>
+  <p class="mute">${t('pin_note')}</p>
+  <div class="row">${S.pin?`<span class="tag done">${t('pin_on')}</span><button class="btn sec sm" onclick="setPin()">${t('change_pin')}</button><button class="btn red sm" onclick="clearPin()">${t('remove_pin')}</button>`:`<button class="btn" onclick="setPin()">${t('set_pin')}</button>`}</div></div>
+  <div class="card"><h2>${t('about_h')}</h2><p class="mute">${t('about_t')}<br>${t('cnt_p')}: ${S.patients.length} · ${t('cnt_a')}: ${S.appts.length}</p></div>`;
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='clinic-backup-'+today()+'.json';document.body.appendChild(a);a.click();a.remove();
+}
+function importData(f){
+  if(!f)return;const r=new FileReader();
+  r.onload=()=>{let d;try{d=JSON.parse(r.result);if(!Array.isArray(d.patients)||!Array.isArray(d.appts))throw 0}catch(e){showMsg(t('import_bad'));return}
+    askConfirm(t('import_q',{p:d.patients.length,a:d.appts.length}),()=>{
+      S=Object.assign({patients:[],appts:[],pin:null},d);save();showMsg(t('import_ok'),()=>go('dash'));
+    },t('confirm'),true)};
+  r.readAsText(f);
+}
+
+/* ================= start ================= */
+try{
+  if(/^https?:$/.test(location.protocol)){
+    const base=location.href.split('#')[0].split('?')[0];
+    const m={name:LANG==='ar'?'إدارة العيادة':'Clinic Manager',short_name:LANG==='ar'?'العيادة':'Clinic',start_url:base,scope:base.replace(/[^\/]*$/,''),display:'standalone',background_color:'#f4f6f8',theme_color:'#0f766e',
+      icons:[{src:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAACBElEQVR42u3dwbFFQBBA0TZlT6TsiMFSpjIgCKpofU4Cf8r0Neov3nTDMp0BRTWPAAGAAEAAIAAQAAgABAACAAGAAEAAIAAQAAgABAACAAGAAEAAIAAQAAgABAACAAGAAEAAIAAQAAgABAACAAGAAEAAIAB4Su8R3Hds+2t/e1xnG3BD55rUnIMvBJ9Ahv/D6xGA4bcuARh+6xMACMDb3zoFAAIAAYAAQAAgABAACAAEAAIAAYAAQAAgABAACAAEAAIAAYAAQAAgABAACAAEAAIAAYAAQAAgAMIdYbnuCPPT39+X6b6yNAEYfCGU/QQy/OFCkaoBGH4RlA3A8IvAJxBUDMDb3yngBAABgABAACAAEAAIAAQAAgABgABAACAAEAAIAAQAAgABgABAACAABAACAAGAAEAAIAAQAAgABAACCPdL8Z/9dALgBPDWoOo+Ng+PyvvXPEQq75ub4nFTvC37X3xOTf8FAgGAAEAAIAAQAAgABIAAQAAgABAACAAEAAIAAYAAQAAgABAACAAEAAIAAYAAQAAgABAACAAEAAIIv3tvnQIAATgFvP0FIALDLwARGP5wR1i4O8zgCwB8AoEAQAAgABAACAAEAAIAAYAAQAAgABAACAAEAAIAAYAAQAAgABAACAABgABAACAAEAAIAAQAAgABgABAACAAEAAIAPK6AErPVgut+q5NAAAAAElFTkSuQmCC',sizes:'192x192',type:'image/png',purpose:'any'},{src:'data:image/png;base64,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',sizes:'512x512',type:'image/png',purpose:'any'}]};
+    const lk=document.createElement('link');lk.rel='manifest';
+    lk.href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/manifest+json'}));
+    document.head.appendChild(lk);
+  }
+}catch(e){}
+load();
+applyLang();
+if(S.pin){$('lock').style.display='flex';$('pinIn').focus()}
+render();
+</script>
+</body>
+</html>
